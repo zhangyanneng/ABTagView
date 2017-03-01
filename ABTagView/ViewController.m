@@ -67,11 +67,11 @@
 
 - (void)tagView:(ABTagView *)tagView didSelectForIndex:(NSInteger)index {
     
-    if (index == 3) {
-        UIButton *button = [tagView allButtons][index];
-        
-        [button setBackgroundColor:[UIColor orangeColor] forState:UIControlStateSelected];
-    }
+//    if (index == 3) {
+//        UIButton *button = [tagView allButtons][index];
+//        
+//        [button setBackgroundColor:[UIColor orangeColor] forState:UIControlStateSelected];
+//    }
     
 }
 
@@ -85,7 +85,7 @@
     
     [self.array removeLastObject];
     [self.tagView reloadData];
-    NSLog(@"执行了");
+
 }
 
 @end

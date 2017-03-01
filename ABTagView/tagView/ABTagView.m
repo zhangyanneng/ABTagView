@@ -7,19 +7,13 @@
 //
 
 #import "ABTagView.h"
-#import "NSString+TextSize.h"
 
 @interface ABTagView()
 {
     CGFloat _lastWidth; //记录最新宽作为x
     CGFloat _lastHeight; //记录最新高作为y
     UIButton *_tmpBtn;
-    UIEdgeInsets _insets; //设置button的内边距
-    
-    CGFloat _leftMargin;
-    CGFloat _topMargin;
-    CGFloat _rightMargin;
-    CGFloat _bottomMargin;
+    UIEdgeInsets _insets; //记录button的内边距
     
 }
 
@@ -70,7 +64,7 @@
         CGFloat x = _lastWidth;
         CGFloat y = _lastHeight;
         
-        CGSize size = [button.titleLabel.text stringSizeWithFont:button.titleLabel.font maxWidth:self.maxWidth];
+        CGSize size = [self stringSizeFrom:button.titleLabel.text withFont:button.titleLabel.font maxWidth:self.maxWidth];
         
         CGFloat width = size.width + _insets.left + _insets.right;
         CGFloat height = size.height + _insets.top + _insets.bottom;
@@ -158,19 +152,6 @@
     }
     
 }
-#pragma mark - 私有方法
-- (void)setDefualtConfig {
-    //进行默认设置
-    self.maxWidth  = self.bounds.size.width;
-    self.maxHeight = self.bounds.size.height;
-    
-    self.hMargin  = self.hMargin ? self.hMargin : 10;
-    self.vMargin  = self.vMargin ? self.vMargin : 10;
-    _leftMargin   = _leftMargin ? _leftMargin : self.hMargin;
-    _rightMargin  = _rightMargin ? _rightMargin : self.hMargin;
-    _topMargin    = _topMargin ? _topMargin : self.vMargin;
-    _bottomMargin = _bottomMargin ? _bottomMargin : self.vMargin;
-}
 
 #pragma mark - 外界调用的方法
 - (void)setHorizontalMargin:(CGFloat)hMargin verticalityMargin:(CGFloat)vMargin {
@@ -182,10 +163,6 @@
     self.hMargin = hMargin;
     self.vMargin = vMargin;
     
-    _leftMargin = insets.left;
-    _rightMargin = insets.right;
-    _topMargin = insets.top;
-    _bottomMargin = insets.bottom;
 }
 
 - (NSArray *)selectedTagDatas {
@@ -213,6 +190,28 @@
     return [self.buttonArray copy];
 }
 
+#pragma mark - 私有方法
+- (void)setDefualtConfig {
+    //进行默认设置
+    self.maxWidth  = self.bounds.size.width;
+    self.maxHeight = self.bounds.size.height;
+    
+    self.hMargin  = self.hMargin ? self.hMargin : 10;
+    self.vMargin  = self.vMargin ? self.vMargin : 10;
+    
+}
+
+- (CGSize)stringSizeFrom:(NSString *)string withFont:(UIFont *)font maxWidth:(CGFloat)width maxHeight:(CGFloat)height {
+    NSMutableDictionary *attr = [NSMutableDictionary dictionary];
+    CGSize maxSize = CGSizeMake(width, height);
+    attr[NSFontAttributeName] = font;
+    return [string boundingRectWithSize:maxSize options:NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attr context:nil].size;
+}
+
+- (CGSize)stringSizeFrom:(NSString *)string withFont:(UIFont *)font maxWidth:(CGFloat)width {
+    
+    return [self stringSizeFrom:string withFont:font maxWidth:width maxHeight:MAXFLOAT];
+}
 #pragma mark - 懒加载数据模型
 
 - (void)setDataSource:(id<ABTagViewDataSource>)dataSource {

@@ -51,11 +51,16 @@ typedef enum : NSUInteger {
 @property (nonatomic, assign) ABTagAlignment alignment; //对齐方式，默认左对齐
 
 
+/**
+ 设置水平和垂直间距
+
+ @param hMargin 设置水平间距
+ @param vMargin 设置垂直间距
+ */
 - (void)setHorizontalMargin:(CGFloat)hMargin verticalityMargin:(CGFloat)vMargin;
 
-//- (void)setEdgeInsets:(UIEdgeInsets)insets horizontalMargin:(CGFloat)hMargin verticalityMargin:(CGFloat)vMargin;
 /**
- 返回选中的tag的index
+ 返回选中的tag的indexs
 
  @return array
  */
