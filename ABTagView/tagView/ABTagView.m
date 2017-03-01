@@ -65,6 +65,9 @@
         CGFloat y = _lastHeight;
         
         CGSize size = [self stringSizeFrom:button.titleLabel.text withFont:button.titleLabel.font maxWidth:self.maxWidth];
+        if (size.width == 0 || size.height == 0) {
+            size = button.imageView.image.size;
+        }
         
         CGFloat width = size.width + _insets.left + _insets.right;
         CGFloat height = size.height + _insets.top + _insets.bottom;
