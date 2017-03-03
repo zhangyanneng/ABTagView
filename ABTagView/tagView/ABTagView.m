@@ -46,8 +46,6 @@
         button.tag = i;
         [button setAdjustsImageWhenHighlighted:NO]; //取消高亮状态
         
-        [button titleColorForState:UIControlStateSelected];
-        
         [button setTitleColor: [button titleColorForState:UIControlStateSelected] forState:UIControlStateHighlighted];
         
         [self addSubview:button];

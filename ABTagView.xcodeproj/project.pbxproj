@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2E4E9E0A1E67B23100EF2443 /* YNTagView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E4E9E091E67B23100EF2443 /* YNTagView.m */; };
 		2EB8DDB01E6551D700A6792C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB8DDAF1E6551D700A6792C /* main.m */; };
 		2EB8DDB31E6551D700A6792C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB8DDB21E6551D700A6792C /* AppDelegate.m */; };
 		2EB8DDB61E6551D700A6792C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EB8DDB51E6551D700A6792C /* ViewController.m */; };
@@ -17,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2E4E9E081E67B23100EF2443 /* YNTagView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YNTagView.h; sourceTree = "<group>"; };
+		2E4E9E091E67B23100EF2443 /* YNTagView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YNTagView.m; sourceTree = "<group>"; };
 		2EB8DDAB1E6551D700A6792C /* ABTagView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ABTagView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EB8DDAF1E6551D700A6792C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2EB8DDB11E6551D700A6792C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -88,6 +91,8 @@
 			children = (
 				2EB8DDC61E65521600A6792C /* ABTagView.h */,
 				2EB8DDC71E65521600A6792C /* ABTagView.m */,
+				2E4E9E081E67B23100EF2443 /* YNTagView.h */,
+				2E4E9E091E67B23100EF2443 /* YNTagView.m */,
 			);
 			path = tagView;
 			sourceTree = "<group>";
@@ -166,6 +171,7 @@
 				2EB8DDC81E65521600A6792C /* ABTagView.m in Sources */,
 				2EB8DDB61E6551D700A6792C /* ViewController.m in Sources */,
 				2EB8DDB31E6551D700A6792C /* AppDelegate.m in Sources */,
+				2E4E9E0A1E67B23100EF2443 /* YNTagView.m in Sources */,
 				2EB8DDB01E6551D700A6792C /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
