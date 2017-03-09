@@ -12,6 +12,7 @@
 {
     CGFloat _radius;
     CGFloat _borderWidth;
+    UIFont  *_font;
     UIColor *_borderColor;
     UIColor *_titileColor;
     UIColor *_selTitileColor;
@@ -51,8 +52,14 @@
     if (visibleItemViews.count == 0) {
         return CGSizeMake(self.padding.left + self.padding.right, self.padding.top + self.padding.bottom);
     }
+    CGPoint itemViewOrigin = CGPointZero;
+    if (self.alignment) {
+        itemViewOrigin = CGPointMake(self.padding.left, self.padding.top);
+    } else {
+        itemViewOrigin = CGPointMake(size.width - self.padding.right, self.padding.top);
+    }
     
-    CGPoint itemViewOrigin = CGPointMake(self.padding.left, self.padding.top);
+    
     CGFloat currentRowMaxY = itemViewOrigin.y;
     
     for (NSInteger i = 0, l = visibleItemViews.count; i < l; i ++) {
@@ -62,22 +69,45 @@
         itemViewSize.width = fmaxf(self.minimumItemSize.width, itemViewSize.width);
         itemViewSize.height = fmaxf(self.minimumItemSize.height, itemViewSize.height);
         
-        if (itemViewOrigin.x + self.itemMargins.left + itemViewSize.width > size.width - self.padding.right) {
-            // 换行，左边第一个 item 是不考虑 itemMargins.left 的
-            if (shouldLayout) {
-                itemView.frame = CGRectMake(self.padding.left, currentRowMaxY + self.itemMargins.top, itemViewSize.width, itemViewSize.height);
+        //左边
+        if (self.alignment) {
+            if (itemViewOrigin.x + self.itemMargins.left + itemViewSize.width > size.width - self.padding.right) {
+                // 换行，左边第一个 item 是不考虑 itemMargins.left 的
+                if (shouldLayout) {
+                    itemView.frame = CGRectMake(self.padding.left, currentRowMaxY + self.itemMargins.top, itemViewSize.width, itemViewSize.height);
+                }
+                
+                itemViewOrigin.x = self.padding.left + itemViewSize.width + self.itemMargins.right;
+                itemViewOrigin.y = currentRowMaxY;
+            } else {
+                // 当前行放得下
+                if (shouldLayout) {
+                    itemView.frame = CGRectMake(itemViewOrigin.x + self.itemMargins.left, itemViewOrigin.y + self.itemMargins.top, itemViewSize.width, itemViewSize.height);
+                }
+                
+                itemViewOrigin.x += self.itemMargins.left + self.itemMargins.right + itemViewSize.width;
             }
-            
-            itemViewOrigin.x = self.padding.left + itemViewSize.width + self.itemMargins.right;
-            itemViewOrigin.y = currentRowMaxY;
         } else {
-            // 当前行放得下
-            if (shouldLayout) {
-                itemView.frame = CGRectMake(itemViewOrigin.x + self.itemMargins.left, itemViewOrigin.y + self.itemMargins.top, itemViewSize.width, itemViewSize.height);
+            //右边
+            if (itemViewOrigin.x - self.itemMargins.right - itemViewSize.width < self.padding.left) {
+                // 换行，左边第一个 item 是不考虑 itemMargins.left 的
+                CGFloat itemX =size.width - self.padding.right - itemViewSize.width - self.itemMargins.right;
+                if (shouldLayout) {
+                    itemView.frame = CGRectMake(itemX, currentRowMaxY + self.itemMargins.top, itemViewSize.width, itemViewSize.height);
+                }
+                
+                itemViewOrigin.x = itemX;
+                itemViewOrigin.y = currentRowMaxY;
+            } else {
+                // 当前行放得下
+                if (shouldLayout) {
+                    itemView.frame = CGRectMake(itemViewOrigin.x - itemViewSize.width - self.itemMargins.right, itemViewOrigin.y + self.itemMargins.top, itemViewSize.width, itemViewSize.height);
+                }
+                
+                itemViewOrigin.x -= (self.itemMargins.right + itemViewSize.width);
             }
-            
-            itemViewOrigin.x += self.itemMargins.left + self.itemMargins.right + itemViewSize.width;
         }
+        
         
         currentRowMaxY = fmaxf(currentRowMaxY, itemViewOrigin.y + self.itemMargins.top + self.itemMargins.bottom + itemViewSize.height);
     }
@@ -104,6 +134,20 @@
 
 - (void)setupUIWithData:(NSArray *)array {
     //数据默认设置
+    _font           = _font ? _font : [UIFont systemFontOfSize:12];
+    _radius         = _radius ? _radius : 5.0f;
+    _borderWidth    = _borderWidth ? _borderWidth : 1.0f;
+    _borderColor    = _borderColor ? _borderColor : [UIColor grayColor];
+    _titileColor    = _titileColor ? _titileColor : [UIColor blackColor];
+    _selTitileColor = _selTitileColor ? _selTitileColor : [UIColor whiteColor];
+    _backgroundColor= _backgroundColor ? _backgroundColor : [UIColor whiteColor];
+    _selBackgroundColor = _selBackgroundColor ? _selBackgroundColor : [UIColor colorWithRed:0/255.0f green:204/255.0f blue:255/255.0f alpha:1.0];
+    if (self.itemContentInsets.left == 0
+        && self.itemContentInsets.right == 0
+        && self.itemContentInsets.top == 0
+        && self.itemContentInsets.bottom == 0) {
+        self.itemContentInsets = UIEdgeInsetsMake(0, 5, 0, 5);
+    }
     
     //添加按钮
     for (NSString *title in array) {
@@ -111,17 +155,17 @@
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         
         [button setTitle:title forState:UIControlStateNormal];
-        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-        button.titleLabel.font = [UIFont systemFontOfSize:12];
-        button.layer.cornerRadius = 5;
+        [button setTitleColor:_titileColor forState:UIControlStateNormal];
+        [button setTitleColor:_selTitileColor forState:UIControlStateSelected];
+        button.titleLabel.font = _font;
+        button.layer.cornerRadius = _radius;
         button.layer.masksToBounds = YES;
-        button.layer.borderWidth = 1;
-        button.layer.borderColor = [UIColor grayColor].CGColor;
-        button.contentEdgeInsets = UIEdgeInsetsMake(0, 5, 0, 5);
+        button.layer.borderWidth = _borderWidth;
+        button.layer.borderColor = _borderColor.CGColor;
+        button.contentEdgeInsets = self.itemContentInsets;
         
-        [self setUIButton:button backgroundColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [self setUIButton:button backgroundColor:[UIColor greenColor] forState:UIControlStateSelected];
+        [self setUIButton:button backgroundColor:_backgroundColor forState:UIControlStateNormal];
+        [self setUIButton:button backgroundColor:_selBackgroundColor forState:UIControlStateSelected];
         
         [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
 
@@ -134,23 +178,27 @@
 }
 
 - (void)setCornerRadius:(CGFloat)radius borderWidth:(CGFloat)borderWidth borderColor:(UIColor *)color {
-    
+    _radius = radius;
+    _borderWidth = borderWidth;
+    _borderColor = color;
 }
 
-- (void)setTitileColor:(UIColor *)color selectedTitileColor:(UIColor *)selColor {
-    
+- (void)setFont:(UIFont *)font titileColor:(UIColor *)color selectedTitileColor:(UIColor *)selColor {
+    _font = font;
+    _titileColor = color;
+    _selTitileColor = selColor;
 }
 
 - (void)setBackgroundColor:(UIColor *)backgroundColor selectedBackgroundColor:(UIColor *)selectedColor {
-    
+    _backgroundColor = backgroundColor;
+    _selBackgroundColor = selectedColor;
 }
-
 
 - (void)buttonClick:(UIButton *)sender {
     
-//    if (self.multiSelect) {
-//        sender.selected = !sender.selected;
-//    } else {
+    if (self.multiSelect) {
+        sender.selected = !sender.selected;
+    } else {
         if (_tmpBtn == nil){
             sender.selected = YES;
             _tmpBtn = sender;
@@ -165,7 +213,7 @@
             sender.selected = YES;
             _tmpBtn = sender;
         }
-//    }
+    }
     
 }
 
@@ -177,6 +225,26 @@
     
     [button setBackgroundImage:[self imageWithColor:backgroundColor] forState:state];
 }
+
+- (NSArray<NSString *> *)getSelectedDataSources {
+    
+    NSArray<UIView *> *views =  [self visibleSubviews];
+    
+    NSMutableArray<NSString *> *tempArrM = [NSMutableArray arrayWithCapacity:self.dataSources.count];
+    
+    for (UIView *view in views) {
+        if ([view isKindOfClass:[UIButton class]]) {
+            UIButton *button = (UIButton *)view;
+            if (button.selected) {
+                [tempArrM addObject:[button titleForState:UIControlStateNormal]];
+            }
+        }
+    }
+    
+    return [tempArrM copy];
+}
+
+
 //  颜色转换为背景图片
 - (UIImage *)imageWithColor:(UIColor *)color {
     CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);

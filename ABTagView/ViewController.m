@@ -17,6 +17,9 @@
 
 @property (nonatomic,strong) ABTagView *tagView;
 
+@property (nonatomic, weak) YNTagView *yntagView;
+
+
 @end
 
 @implementation ViewController
@@ -25,7 +28,7 @@
     [super viewDidLoad];
     
     
-    NSArray *arr = @[@"职场",@"产品经理",@"JAVA开发工程师",@"iOS开发工程师",@"H5开发工程师",@"邦邦在线",@"架构师",@"Android工程师"];
+    NSArray *arr = @[@"职场",@"产品经理",@"JAVA开发工程师",@"iOS开发工程师",@"H5开发工程师",@"邦邦在线",@"架构师",@"Android工程师",@"职场",@"产品经理",@"JAVA开发工程师",@"职场",@"产品经理",@"职场",@"产品经理"];
     
     //第二种方式
     YNTagView *ynTagView = [[YNTagView alloc] initWithFrame:CGRectMake(0, 50, self.view.bounds.size.width, 300)];
@@ -33,8 +36,10 @@
     ynTagView.minimumItemSize = CGSizeMake(40, 24);
     ynTagView.itemMargins =  UIEdgeInsetsMake(0, 0, 10, 10);
     ynTagView.dataSources = arr;
+    ynTagView.alignment = 0;
+    ynTagView.multiSelect = YES;
     [self.view addSubview:ynTagView];
-    
+    self.yntagView = ynTagView;
     
     
 //    for (NSString *title in arr) {
@@ -82,10 +87,10 @@
     [self.view addSubview:self.tagView];
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    button.frame = CGRectMake(50, 50, 40, 30);
-    [button setTitle:@"移除" forState:UIControlStateNormal];
+    button.frame = CGRectMake(50, 20, 40, 30);
+    [button setTitle:@"查看" forState:UIControlStateNormal];
     [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addSubview:button];
+    [self.view addSubview:button];
     
 }
 
@@ -129,9 +134,14 @@
 
 - (void)buttonClick:(id)sender {
     
-    [self.array removeLastObject];
-    [self.tagView reloadData];
+//    [self.array removeLastObject];
+//    [self.tagView reloadData];
+    
+    for (NSString *title in [self.yntagView getSelectedDataSources]) {
+        NSLog(@"%@",title);
+    }
 
+    
 }
 
 - (void)btnClick:(UIButton *)sender {

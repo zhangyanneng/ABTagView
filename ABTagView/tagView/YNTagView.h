@@ -28,24 +28,32 @@
 /**
  *  item 之间的间距，默认为 UIEdgeInsetsZero。
  *
- *  @warning 上、下、左、右四个边缘的 item 布局时不会考虑 itemMargins.left/bottom/left/right。
+ *  @warning 上、下、左、右四个边缘的 item 布局时不会考虑 itemMargins.left/bottom/top/right。
  */
 @property(nonatomic, assign) UIEdgeInsets itemMargins;
+
+/**
+    item 的内容间距 默认 (0,5,0,5)
+ */
+@property(nonatomic, assign) UIEdgeInsets itemContentInsets;
 
 /**
     是否支持多选，默认是单选
  */
 @property (nonatomic, assign) BOOL multiSelect;
 
+@property (nonatomic, assign) NSInteger alignment;
+
 /**
     数据源，传入字符串数组
  */
 @property (nonatomic,strong) NSArray<NSString *> *dataSources;
 
+- (NSArray<NSString *> *)getSelectedDataSources;
 
 - (void)setCornerRadius:(CGFloat)radius borderWidth:(CGFloat)borderWidth borderColor:(UIColor *)color;
 
-- (void)setTitileColor:(UIColor *)color selectedTitileColor:(UIColor *)selColor;
+- (void)setFont:(UIFont *)font titileColor:(UIColor *)color selectedTitileColor:(UIColor *)selColor;
 
 - (void)setBackgroundColor:(UIColor *)backgroundColor selectedBackgroundColor:(UIColor *)selectedColor;
 
